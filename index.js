@@ -87,6 +87,7 @@ async function sendMessageToBot(message) {
     try {
         const response = await fetch(WEBHOOK_URL, {
             method: 'POST',
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -96,11 +97,16 @@ async function sendMessageToBot(message) {
             })
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         return data.response || data.message || 'Thanks for your message!';
     } catch (error) {
         console.error('Error sending message:', error);
-        return 'Sorry, I encountered an error. Please try again later.';
+        // Return a friendly message for CORS or network errors
+        return 'I\'m having trouble connecting right now. Please try contacting us through our social media links below! 🔗';
     }
 }
 
@@ -155,13 +161,15 @@ if (chatbotInput) {
     });
 }// Contact form submission
 const contactForm = document.getElementById('contactForm');
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    // Add your form submission logic here
-    alert('Thank you for your message! We will get back to you soon.');
-    contactForm.reset();
-});
+        // Add your form submission logic here
+        alert('Thank you for your message! We will get back to you soon.');
+        contactForm.reset();
+    });
+}
 
 // Add parallax effect to hero section
 window.addEventListener('scroll', () => {

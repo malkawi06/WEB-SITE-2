@@ -32,16 +32,16 @@ exports.handler = async (event, context) => {
         // Parse the incoming request body
         const { message, timestamp } = JSON.parse(event.body);
 
-        // Make the request to n8n webhook using GET with query parameters
-        const url = new URL('https://karamq6.app.n8n.cloud/webhook/ras-chatbot');
-        url.searchParams.append('message', message);
-        url.searchParams.append('timestamp', timestamp);
-
-        const response = await fetch(url.toString(), {
-            method: 'GET',
+        // Make the request to n8n webhook using POST
+        const response = await fetch('https://karamq6.app.n8n.cloud/webhook/ras-chatbot', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify({
+                message: message,
+                timestamp: timestamp
+            })
         });
 
         // Get the response from n8n

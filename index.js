@@ -64,7 +64,8 @@ const chatbotToggle = document.getElementById('chatbotToggle');
 const chatbotWindow = document.getElementById('chatbotWindow');
 const chatbotClose = document.getElementById('chatbotClose');
 const chatbotBody = document.querySelector('.chatbot-body');
-const WEBHOOK_URL = 'https://karamq6.app.n8n.cloud/webhook/ras-chatbot';
+// Use Netlify function as proxy to avoid CORS issues
+const WEBHOOK_URL = '/.netlify/functions/chatbot';
 
 chatbotToggle.addEventListener('click', () => {
     chatbotWindow.classList.toggle('active');
@@ -87,7 +88,6 @@ async function sendMessageToBot(message) {
     try {
         const response = await fetch(WEBHOOK_URL, {
             method: 'POST',
-            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -105,7 +105,7 @@ async function sendMessageToBot(message) {
         return data.response || data.message || 'Thanks for your message!';
     } catch (error) {
         console.error('Error sending message:', error);
-        // Return a friendly message for CORS or network errors
+        // Return a friendly message for network errors
         return 'I\'m having trouble connecting right now. Please try contacting us through our social media links below! 🔗';
     }
 }

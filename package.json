@@ -1,0 +1,9 @@
+{
+    "name": "ras-jadara-website",
+    "version": "1.0.0",
+    "description": "RAS Jadara - Robotics and Automation Society Website",
+    "private": true,
+    "dependencies": {
+        "node-fetch": "^2.6.7"
+    }
+}

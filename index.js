@@ -63,6 +63,8 @@ document.querySelectorAll('.fade-in-element').forEach(element => {
 const chatbotToggle = document.getElementById('chatbotToggle');
 const chatbotWindow = document.getElementById('chatbotWindow');
 const chatbotClose = document.getElementById('chatbotClose');
+const chatbotBody = document.querySelector('.chatbot-body');
+const WEBHOOK_URL = 'https://karamq6.app.n8n.cloud/webhook/ras-chatbot';
 
 chatbotToggle.addEventListener('click', () => {
     chatbotWindow.classList.toggle('active');
@@ -80,11 +82,82 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Contact form submission
+// Send message to chatbot webhook
+async function sendMessageToBot(message) {
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        const data = await response.json();
+        return data.response || data.message || 'Thanks for your message!';
+    } catch (error) {
+        console.error('Error sending message:', error);
+        return 'Sorry, I encountered an error. Please try again later.';
+    }
+}
+
+// Add message to chatbot
+function addMessage(message, isBot = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chatbot-message ${isBot ? 'bot' : 'user'}`;
+    messageDiv.textContent = message;
+    chatbotBody.appendChild(messageDiv);
+    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+}
+
+// Handle user input
+function handleUserInput(input) {
+    if (!input.trim()) return;
+
+    addMessage(input, false);
+
+    // Show typing indicator
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'chatbot-message bot typing';
+    typingDiv.textContent = '...';
+    chatbotBody.appendChild(typingDiv);
+
+    // Send to webhook and get response
+    sendMessageToBot(input).then(response => {
+        // Remove typing indicator
+        typingDiv.remove();
+        addMessage(response, true);
+    });
+}
+
+// Add event listeners for chatbot input
+const chatbotInput = document.getElementById('chatbotInput');
+const chatbotSend = document.getElementById('chatbotSend');
+
+if (chatbotSend) {
+    chatbotSend.addEventListener('click', () => {
+        const message = chatbotInput.value;
+        handleUserInput(message);
+        chatbotInput.value = '';
+    });
+}
+
+if (chatbotInput) {
+    chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const message = chatbotInput.value;
+            handleUserInput(message);
+            chatbotInput.value = '';
+        }
+    });
+}// Contact form submission
 const contactForm = document.getElementById('contactForm');
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     // Add your form submission logic here
     alert('Thank you for your message! We will get back to you soon.');
     contactForm.reset();
@@ -128,7 +201,7 @@ if (heroSubtitle) {
     const text = heroSubtitle.textContent;
     heroSubtitle.textContent = '';
     let index = 0;
-    
+
     const typeWriter = () => {
         if (index < text.length) {
             heroSubtitle.textContent += text.charAt(index);
@@ -136,7 +209,7 @@ if (heroSubtitle) {
             setTimeout(typeWriter, 50);
         }
     };
-    
+
     // Start typing after page load
     setTimeout(typeWriter, 1000);
 }
@@ -146,7 +219,7 @@ const sections = document.querySelectorAll('section[id]');
 
 window.addEventListener('scroll', () => {
     let current = '';
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
@@ -154,7 +227,7 @@ window.addEventListener('scroll', () => {
             current = section.getAttribute('id');
         }
     });
-    
+
     navLinksItems.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href').substring(1) === current) {

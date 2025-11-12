@@ -32,6 +32,8 @@ exports.handler = async (event, context) => {
         // Parse the incoming request body
         const { message, timestamp } = JSON.parse(event.body);
 
+        console.log('Sending to n8n:', { message, timestamp });
+
         // Make the request to n8n webhook using POST
         const response = await fetch('https://karamq6.app.n8n.cloud/webhook/ras-chatbot', {
             method: 'POST',
@@ -46,6 +48,7 @@ exports.handler = async (event, context) => {
 
         // Get the response from n8n
         const data = await response.json();
+        console.log('Response from n8n:', data);
 
         // Return the response to the client
         return {

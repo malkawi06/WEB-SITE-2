@@ -102,7 +102,14 @@ async function sendMessageToBot(message) {
         }
 
         const data = await response.json();
-        return data.response || data.message || 'Thanks for your message!';
+        console.log('Response from n8n:', data); // للتأكد من البيانات القادمة
+
+        // Try multiple possible response formats from n8n
+        if (typeof data === 'string') {
+            return data;
+        }
+
+        return data.response || data.message || data.output || data.text || data.reply || JSON.stringify(data);
     } catch (error) {
         console.error('Error sending message:', error);
         // Return a friendly message for network errors

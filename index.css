@@ -1112,7 +1112,8 @@ section {
     position: absolute;
     bottom: 80px;
     right: 0;
-    width: 300px;
+    width: 400px;
+    max-width: 90vw;
     background: var(--bg-card);
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
@@ -1148,7 +1149,7 @@ section {
 
 .chatbot-header h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     margin: 0;
 }
 
@@ -1167,15 +1168,16 @@ section {
 
 .chatbot-body {
     padding: var(--spacing-sm);
-    max-height: 300px;
+    max-height: 450px;
     overflow-y: auto;
 }
 
 .chatbot-message {
-    padding: var(--spacing-xs);
-    margin-bottom: var(--spacing-xs);
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
     border-radius: 10px;
-    line-height: 1.4;
+    line-height: 1.5;
+    font-size: 0.95rem;
 }
 
 .chatbot-message.bot {
@@ -1208,19 +1210,19 @@ section {
 
 .chatbot-footer {
     display: flex;
-    gap: 0.5rem;
-    padding: var(--spacing-sm);
+    gap: 0.75rem;
+    padding: 1rem;
     border-top: 1px solid rgba(255, 8, 68, 0.2);
 }
 
 .chatbot-input {
     flex: 1;
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: 1px solid rgba(255, 8, 68, 0.3);
     background: rgba(26, 26, 36, 0.8);
     color: var(--text-primary);
     border-radius: 8px;
-    font-size: 0.875rem;
+    font-size: 0.95rem;
     outline: none;
     transition: var(--transition);
 }
@@ -1231,8 +1233,8 @@ section {
 }
 
 .chatbot-send {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border: none;
     background: var(--accent-gradient);
     color: var(--text-primary);
@@ -1250,8 +1252,43 @@ section {
 }
 
 .chatbot-send svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
+}
+
+/* Larger chatbot on desktop screens */
+@media (min-width: 1024px) {
+    .chatbot-window {
+        width: 450px;
+    }
+
+    .chatbot-body {
+        max-height: 500px;
+    }
+
+    .chatbot-header h3 {
+        font-size: 1.35rem;
+    }
+
+    .chatbot-message {
+        font-size: 1rem;
+        padding: 0.875rem;
+    }
+
+    .chatbot-input {
+        font-size: 1rem;
+        padding: 0.875rem;
+    }
+
+    .chatbot-send {
+        width: 50px;
+        height: 50px;
+    }
+
+    .chatbot-send svg {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 /* Animations */
